@@ -17,7 +17,7 @@
     },
     created() {
       axios
-        .get('https://robispo-vue-axios.firebaseio.com/users.json')
+        .get('/users.json')
         .then(r => {
           console.log(r);
 
@@ -31,7 +31,7 @@
           }
 
           console.log(users);
-          
+
           this.email = users[0].email;
         })
         .catch(e => console.log(e));
