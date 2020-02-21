@@ -1,8 +1,8 @@
 <template>
   <div id="dashboard">
     <h1>That's the dashboard!</h1>
-    <p>You should only get here if you're authenticated!</p>
-    <p>Your email address: {{ email }}</p>
+    <p v-if="!email">You should only get here if you're authenticated!</p>
+    <p v-if="email">Your email address: {{ email }}</p>
   </div>
 </template>
 
@@ -10,31 +10,13 @@
   import axios from 'axios';
 
   export default {
-    data() {
-      return {
-        email: ''
-      };
+    computed: {
+      email() {
+        return this.$store.getters.user ? this.$store.getters.user.email : '';
+      }
     },
     created() {
-      axios
-        .get('/users.json')
-        .then(r => {
-          console.log(r);
-
-          const users = [];
-          const data = r.data;
-
-          for (let k in data) {
-            let user = data[k];
-            user.id = k;
-            users.push(user);
-          }
-
-          console.log(users);
-
-          this.email = users[0].email;
-        })
-        .catch(e => console.log(e));
+      this.$store.dispatch('getUser');
     }
   };
 </script>
